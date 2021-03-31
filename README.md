@@ -1,4 +1,4 @@
-### Hi there 👋
+### Repositório de códigos Python para as atividades da disciplina de Programação Orientada ao Objeto 👋
 
 <!--
 **ruannyury/RuannYury** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
