@@ -82,5 +82,5 @@ class NotaFiscal:
                     item_nota.get_quantidade(), item_nota.get_valor_unitario(),
                     item_nota.get_valor_item())
 
-        formatacao_nota += '\n%s\nValor Total: %.2f' % (linhas, self._valorNota)
+        formatacao_nota += '\n{}\nValor Total: {:.2f}'.format(linhas, self._valorNota)
         print(formatacao_nota)
