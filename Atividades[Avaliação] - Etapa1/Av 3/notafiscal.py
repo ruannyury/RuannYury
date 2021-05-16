@@ -54,30 +54,33 @@ class NotaFiscal:
         """
         linhas = '-' * 111
 
-        formatacao_nota = '%s\n' \
-                          'NOTA FISCAL%100s\n' \
-                          'Cliente:%6d%4sNome: %s\n' \
-                          'CPF/CNPJ: %s\n' \
-                          '%s\n' \
+        formatacao_nota = '{}\n' \
+                          'NOTA FISCAL{:>100}\n' \
+                          'Cliente:{:>6}{:>4}Nome: {}\n' \
+                          'CPF/CNPJ: {}\n' \
+                          '{}\n' \
                           'ITENS\n' \
-                          '%s\n' \
-                          'Seq%3sDescricao%52sQTD%7sValor Unit%12sPreço\n' \
-                          '%s  %s    %s     %s     %s' % \
-                          (linhas,
-                           self.data_nota(),
-                           self._cliente.get_codigo(), ' ', self._cliente.get_nome(),
-                           self._cliente.get_cnpjcpf(),
-                           linhas,
-                           linhas,
-                           ' ', ' ', ' ', ' ',
-                           '-' * 4, '-' * 56, '-' * 5, '-' * 12, '-' * 18)
+                          '{}\n' \
+                          'Seq{:>3}Descricao{:>52}QTD{:>7}Valor Unit{:19}Preço\n' \
+                          '{}  {}    {}     {}     {}'.format(linhas,
+                                                              self.data_nota(),
+                                                              self._cliente.get_codigo(), ' ', self._cliente.get_nome(),
+                                                              self._cliente.get_cnpjcpf(),
+                                                              linhas,
+                                                              linhas,
+                                                              ' ', ' ', ' ', ' ',
+                                                              '-' * 4, '-' * 56, '-' * 5, '-' * 12, '-' * 18)
 
         if len(self._itens) > 0:  # Adicionando e formatando os itens, elementos finais da nota
             for item_nota in self._itens:
-                formatacao_nota += '\n\n%s%3s%s' % (item_nota.get_sequencial(), ' ', item_nota.get_descricao())
+                formatacao_nota += '\n\n{}{:>3}{}'.format(item_nota.get_sequencial(), ' ', item_nota.get_descricao())
                 formatacao_nota += ' ' * (60 - len(item_nota.get_descricao()))  # Controlando de acordo com a descrição
-                formatacao_nota += '%5d%17.2f%23.2f' % (item_nota.get_quantidade(), item_nota.get_valor_unitario(),
-                                                        item_nota.get_valor_item())
+                '''formatacao_nota += '{:>5}{:>17.2}{:>23.2}'.format(item_nota.get_quantidade(),
+                                                                  item_nota.get_valor_unitario(),
+                                                                  item_nota.get_valor_item())'''
+                formatacao_nota += '{:.2f}             {:.2f}                  {:.2f}'.format(
+                    item_nota.get_quantidade(), item_nota.get_valor_unitario(),
+                    item_nota.get_valor_item())
 
         formatacao_nota += '\n%s\nValor Total: %.2f' % (linhas, self._valorNota)
         print(formatacao_nota)
