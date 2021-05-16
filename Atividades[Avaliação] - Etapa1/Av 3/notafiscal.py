@@ -75,12 +75,9 @@ class NotaFiscal:
             for item_nota in self._itens:
                 formatacao_nota += '\n\n{}{:>3}{}'.format(item_nota.get_sequencial(), ' ', item_nota.get_descricao())
                 formatacao_nota += ' ' * (60 - len(item_nota.get_descricao()))  # Controlando de acordo com a descrição
-                '''formatacao_nota += '{:>5}{:>17.2}{:>23.2}'.format(item_nota.get_quantidade(),
-                                                                  item_nota.get_valor_unitario(),
-                                                                  item_nota.get_valor_item())'''
                 formatacao_nota += '{:.2f}             {:.2f}                  {:.2f}'.format(
-                    item_nota.get_quantidade(), item_nota.get_valor_unitario(),
-                    item_nota.get_valor_item())
+                                                            item_nota.get_quantidade(), item_nota.get_valor_unitario(),
+                                                            item_nota.get_valor_item())
 
         formatacao_nota += '\n{}\nValor Total: {:.2f}'.format(linhas, self._valorNota)
         print(formatacao_nota)
