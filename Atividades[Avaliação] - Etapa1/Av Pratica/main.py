@@ -1,11 +1,12 @@
-from folha_pagamento import *
+from folha_pagamento import FolhaPagamento
 from colaborador import Colaborador
 from movimento_folha import MovimentoFolha
+from tipomovimento import TipoMovimento
 
 
 def main():
     # Objeto FP:
-    fp = FolhaPagamento(9, 2019)
+    fp = FolhaPagamento(9, 2019, 0, 0)
     # Objetos CL:
     cl01 = Colaborador("100", "Manoel Claudino", "Av 13 de Maio 2081", "88671020",
                        "Benfica", "60020-060", "124543556-89", 4500.00)
@@ -15,39 +16,45 @@ def main():
     cl03 = Colaborador("300", "Gurmelina Castro Saraiva", "Av João Pessoa 1020",
                        "3235-1089", "Damas", "60330-090", "350245632-76", 3000.00)
     # Objetos MF:
-    mf01 = MovimentoFolha(100, "Salario", 4500.00, "P")
-    mf02 = MovimentoFolha(100, "Plano Saúde", 1000.00, "P")
-    mf03 = MovimentoFolha(100, "Pensão", 600.00, "D")
-    mf04 = MovimentoFolha(200, "Salario", 2500.00, "P")
-    mf05 = MovimentoFolha(200, "Gratificação", 1000.00, "P")
-    mf06 = MovimentoFolha(200, "Faltas", 600.00, "D")
-    mf07 = MovimentoFolha(300, "Salario", 4500.00, "P")
-    mf08 = MovimentoFolha(300, "Plano Saúde", 1000.00, "P")
-    mf09 = MovimentoFolha(300, "Pensão", 600.00, "D")
-    # Inserir todos os objetos do tipo MovimentoFolha na lista movimentos do objeto FP:
-    fp.inserir_movimentos(mf01)
-    fp.inserir_movimentos(mf02)
-    fp.inserir_movimentos(mf03)
-    fp.inserir_movimentos(mf04)
-    fp.inserir_movimentos(mf05)
-    fp.inserir_movimentos(mf06)
-    fp.inserir_movimentos(mf07)
-    fp.inserir_movimentos(mf08)
-    fp.inserir_movimentos(mf09)
+    mf01 = MovimentoFolha(cl01, "Salario", 4500.00, TipoMovimento.P)
+    mf02 = MovimentoFolha(cl01, "Plano Saúde", 1000.00, TipoMovimento.P)
+    mf03 = MovimentoFolha(cl01, "Pensão", 600.00, TipoMovimento.D)
+    mf04 = MovimentoFolha(cl02, "Salario", 2500.00, TipoMovimento.P)
+    mf05 = MovimentoFolha(cl02, "Gratificação", 1000.00, TipoMovimento.P)
+    mf06 = MovimentoFolha(cl02, "Faltas", 600.00, TipoMovimento.D)
+    mf07 = MovimentoFolha(cl03, "Salario", 4500.00, TipoMovimento.P)
+    mf08 = MovimentoFolha(cl03, "Plano Saúde", 1000.00, TipoMovimento.P)
+    mf09 = MovimentoFolha(cl03, "Pensão", 600.00, TipoMovimento.D)
 
-    cl01.inserir_movimentos1(mf01)
-    cl01.inserir_movimentos1(mf02)
-    cl01.inserir_movimentos1(mf03)
-    cl02.inserir_movimentos1(mf04)
-    cl02.inserir_movimentos1(mf05)
-    cl02.inserir_movimentos1(mf06)
-    cl03.inserir_movimentos1(mf07)
-    cl03.inserir_movimentos1(mf08)
-    cl03.inserir_movimentos1(mf09)
+    fp.set_colaborador(cl01)
+    fp.set_colaborador(cl02)
+    fp.set_colaborador(cl03)
 
-    print(cl01.calcular_salario(fp))
-    print(cl02.calcular_salario(fp))
-    print(cl03.calcular_salario(fp))
+    fp.inserir_movimento_fp(mf01)
+    fp.inserir_movimento_fp(mf02)
+    fp.inserir_movimento_fp(mf03)
+    fp.inserir_movimento_fp(mf04)
+    fp.inserir_movimento_fp(mf05)
+    fp.inserir_movimento_fp(mf06)
+    fp.inserir_movimento_fp(mf07)
+    fp.inserir_movimento_fp(mf08)
+    fp.inserir_movimento_fp(mf09)
+
+    cl01.inserir_movimentos_colab(mf01)
+    cl01.inserir_movimentos_colab(mf02)
+    cl01.inserir_movimentos_colab(mf03)
+    cl02.inserir_movimentos_colab(mf04)
+    cl02.inserir_movimentos_colab(mf05)
+    cl02.inserir_movimentos_colab(mf06)
+    cl03.inserir_movimentos_colab(mf07)
+    cl03.inserir_movimentos_colab(mf08)
+    cl03.inserir_movimentos_colab(mf09)
+
+    cl01.calcular_salario()
+    cl02.calcular_salario()
+    cl03.calcular_salario()
+
+    fp.calcular_folha()
 
 
 if __name__ == '__main__':

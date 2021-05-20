@@ -1,59 +1,36 @@
 from movimento_folha import MovimentoFolha
 
-COLABORADORES = set()
-
 
 class FolhaPagamento:
-    def __init__(self, mes, ano, total_descontos=0, total_proventos=0):
+    def __init__(self, mes, ano, total_descontos, total_proventos):
         self._mes = mes
-        self._ano = int(ano)
+        self._ano = ano
         self._total_descontos = total_descontos
         self._total_proventos = total_proventos
-        self._movimentos = []
+        self._lista_movimentos = []
+        self._colaboradores = []
 
-    # Inserir todos os objetos do tipo MovimentoFolha na lista movimentos do objeto FP:
-    def inserir_movimentos(self, movimento):
+    def total_salario(self):
+        total_salario = 0
+        for colaborador in self._colaboradores:
+            total_salario += colaborador.get_salario()
+        return total_salario
+
+    def inserir_movimento_fp(self, movimento):
         if isinstance(movimento, MovimentoFolha):
-            self._movimentos.append(movimento)
-            self.inserir_colaboradores(movimento.get_cod_colaborador)
+            self._lista_movimentos.append(movimento)
 
-    @staticmethod
-    def inserir_colaboradores(cod_colaborador):
-        COLABORADORES.add(cod_colaborador)
-
-    def infos_colaborador(self, cod_colaborador):
-        total_descontos = 0
-        total_proventos = 0
-        salario_atual = 0
-        for movimento in self._movimentos:
-            if movimento.get_cod_colaborador == cod_colaborador:
-                if movimento.get_qual_tipo_movimento == 'Desconto':
-                    total_proventos += movimento.get_valor
-                elif movimento.get_qual_tipo_movimento == 'Desconto':
-                    total_descontos += movimento.get_valor
-                if movimento.get_descricao == 'Salario':
-                    salario_atual = movimento.get_valor
-
-        return total_proventos, total_descontos, salario_atual
-
-    def infos_folha_pag(self):
-        total_descontos = 0
-        total_proventos = 0
-        total_salarios = 0
-        for colab in COLABORADORES:
-            provent, descont, salario = self.infos_colaborador(colab)
-            total_descontos += descont
-            total_proventos += provent
-            total_salarios += salario
-        return total_proventos, total_descontos, total_salarios
+    def set_colaborador(self, colaborador):
+        self._colaboradores.append(colaborador)
 
     def calcular_folha(self):
-        total_proventos, total_descontos, total_salarios = self.infos_folha_pag()
-        total_a_pagar = total_proventos - total_descontos
-        str_ = "Total de salários atual = {} \nTotal de Proventos= {}" \
-               "\nTotal de Descontos = {}\nTotal a Pagar = {}\n".format(total_salarios,
-                                                                        total_proventos,
-                                                                        total_descontos,
-                                                                        total_a_pagar)
+        for movimento in self._lista_movimentos:
+            if movimento.get_tipo().value == 1:
+                self._total_proventos += movimento.get_valor()
+            else:
+                self._total_descontos += movimento.get_valor()
 
-        return str_
+        total_pagar = (self.total_salario() + self._total_proventos) - self._total_descontos
+        print('Total de Salários = {}\nTotal de Proventos = {}\nTotal de Descontos = {}\n'
+              'Total a Pagar = {}'.format(self.total_salario(), self._total_proventos, self._total_descontos,
+                                          total_pagar))
