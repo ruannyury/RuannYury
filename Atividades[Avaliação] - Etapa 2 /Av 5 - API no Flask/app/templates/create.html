@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h1>Adicionar</h1>
+<h1>Adicionar cliente</h1>
 <form action="" method="POST">
     <div class="form-floating">
         <label for="floatingInput">Nome:</label>
@@ -14,7 +14,11 @@
         <label for="floatingPassword">CPF/CNPJ:</label>
         <input type="text" class="form-control" id="floatingPassword" placeholder="CPF/CNPJ" name="cpfcnpj">
     </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+    <div class="form-floating">
+        <label for="floatingPassword">Escolha 1 para Pessoa Física e 2 para Jurídica:</label>
+        <input type="number" class="form-control" id="floatingInput" placeholder="1 ou 2" name="fisijurid">
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Enviar</button>
 </form>
 
 {% endblock %}
