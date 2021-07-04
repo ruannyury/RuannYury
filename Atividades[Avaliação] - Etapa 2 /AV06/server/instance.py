@@ -18,11 +18,27 @@ class Server:
         self.app.config['PROPAGATE_EXCEPTIONS'] = True
 
         self.book_ns = self.book_ns()
+        self.cliente_ns = self.cliente_ns()
+        self.produto_ns = self.produto_ns()
+        self.item_ns = self.item_ns()
+        self.nota_fiscal_ns = self.nota_fiscal_ns()
 
         super().__init__()
 
     def book_ns(self):
         return self.api.namespace(name='Books', description='book related operations', path='/')
+
+    def cliente_ns(self):
+        return self.api.namespace(name='Cliente', description='cliente related operations', path='/c')
+
+    def produto_ns(self):
+        return self.api.namespace(name='Produto', description='produto related operations', path='/p')
+
+    def item_ns(self):
+        return self.api.namespace(name='Item', description='item related operations', path='/i')
+
+    def nota_fiscal_ns(self):
+        return self.api.namespace(name='NotaFiscal', description='nota fiscal related operations', path='/n')
 
     def run(self):
         self.app.run(
