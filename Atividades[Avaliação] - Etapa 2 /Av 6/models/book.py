@@ -50,7 +50,7 @@ class ClienteModel(db.Model):
     cnpjcpf = db.Column(db.String(160), nullable=False, unique=True)
     tipo = db.Column(db.String(160), nullable=False)
 
-    notafiscal = db.relationship("NotaFiscalModel", back_populates="clientes", uselist=False)
+    # notafiscal = db.relationship("NotaFiscalModel", back_populates="clientes")
 
     def __init__(self, nome, codigo, cnpjcpf, tipo):
         self.nome = nome
@@ -92,7 +92,7 @@ class ProdutoModel(db.Model):
     descricao = db.Column(db.String(160), nullable=False)
     valor_unidade = db.Column(db.Float, nullable=False)
 
-    item = db.relationship("ItemModel", back_populates="produtos", uselist=False)
+    # item = db.relationship("ItemModel", back_populates="produtos", uselist=False)
 
     def __init__(self, descricao, valor_unidade):
         self.descricao = descricao
@@ -129,8 +129,8 @@ class ItemModel(db.Model):
     seq = db.Column(db.Integer, nullable=False)
     qtd = db.Column(db.Integer, nullable=False)
 
-    produto_id = db.Column(db.Integer, db.ForeignKey('produtos.id'))
-    produto = db.relationship('ProdutoModel', back_populates='itens')
+    # produto_id = db.Column(db.Integer, db.ForeignKey('produtos.id'))
+    # produto = db.relationship('ProdutoModel', back_populates='itens')
 
     def __init__(self, seq, qtd):
         # self.id = id
@@ -172,8 +172,8 @@ class NotaFiscalModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     codigo = db.Column(db.Integer, nullable=False, unique=True)
 
-    cliente_id = db.Column(db.Integer, db.ForeignKey('clientes.id'))
-    cliente = db.relationship('ClienteModel', back_populates='notafiscal')
+    # cliente_id = db.Column(db.Integer, db.ForeignKey('clientes.id'))
+    # cliente = db.relationship('ClienteModel', back_populates='notafiscal')
 
     def __init__(self, codigo):
         # self.id = id
