@@ -1,4 +1,5 @@
 from app import db
+import datetime
 from sqlalchemy.sql import func
 from sqlalchemy import Table, Column, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship, backref, session, query
@@ -15,6 +16,8 @@ class Usuario(db.Model):
 
 
 class Cliente(db.Model):
+    __tablename__ = 'clientes'
+
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(150))
     codigo = db.Column(db.Integer)
@@ -38,10 +41,11 @@ class Cliente(db.Model):
 
 
 class ItemNotaFiscal(db.Model):
+    __tablename__ = 'itens'
+
     id = db.Column(db.Integer, primary_key=True)
     sequencial = db.Column(db.Integer)
     quantidade = db.Column(db.Integer)
-    produto = db.Column(db.String(150))
 
     def __init__(self, id, sequencial, quantidade, produto):
         self.id = id
@@ -79,6 +83,12 @@ class ItemNotaFiscal(db.Model):
 
 
 class Produto:
+    __tablename__ = 'produtos'
+
+    id = db.Column(db.Integer, primary_key=True)
+    codigo = db.Column(db.Integer)
+    descricao = db.Column(db.String(150))
+    valorUnitario = db.Column(db.Float)
 
     def __init__(self, id, codigo, descricao, valorUnitario):
         self.id = id
@@ -96,6 +106,11 @@ class Produto:
 
 
 class NotaFiscal:
+    __tablename__ = 'notas'
+
+    id = db.Column(db.Integer, primary_key=True)
+    codigo = db.Column(db.String(150))
+
     def __init__(self, id, codigo, cliente, lista_itens=None):
         self.id = id
         self.codigo = codigo
@@ -106,7 +121,7 @@ class NotaFiscal:
         self.valorNota = 0.0
 
     def str_itens(self):
-        if self.lista_itens == None:
+        if self.lista_itens is None:
             itens_json = [item for item in self.itens]
             return itens_json
         else:
@@ -131,11 +146,23 @@ class NotaFiscal:
     def adicionar_item(self, item):
         self.itens.append(item)
 
-    def calcular_total_nota(self):
+    def calcular_total_nota(self, controle=False):
         valor = 0.0
         for item in self.itens:
-            valor = valor + item.valorItem
+            valor = valor + item["valorItem"]
         self.valorNota = valor
+        if controle == True:
+            return valor
+
+    def get_sequencial(self, item):
+        seq = str(item['sequencial'])
+        if len(seq) > 2:
+            return seq
+
+        elif len(seq) > 1:
+            return f'0{seq}'
+
+        return f'00{seq}'
 
     def imprimir_nota_fiscal(self):
         """
@@ -162,11 +189,11 @@ class NotaFiscal:
 
         if len(self.itens) > 0:  # Adicionando e formatando os itens, elementos finais da nota
             for item_nota in self.itens:
-                formatacao_nota += '\n\n{}{:>3}{}'.format(item_nota.get_sequencial(), ' ', item_nota.descricao)
-                formatacao_nota += ' ' * (60 - len(item_nota.descricao))  # Controlando de acordo com a descrição
+                formatacao_nota += '\n\n{}{:>3}{}'.format(self.get_sequencial(item_nota), ' ', item_nota['descricao'])
+                formatacao_nota += ' ' * (60 - len(item_nota['descricao']))  # Controlando de acordo com a descrição
                 formatacao_nota += '{:.2f}             {:.2f}                  {:.2f}'.format(
-                    item_nota.quantidade, item_nota.valorUnitario,
-                    item_nota.valorItem)
+                    item_nota['quantidade'], item_nota['valorUnitario'],
+                    item_nota['valorItem'])
 
         formatacao_nota += '\n{}\nValor Total: {:.2f}'.format(linhas, self.valorNota)
-        print(formatacao_nota)
+        return formatacao_nota
