@@ -380,6 +380,40 @@ def deleta_nota(id):
         return gera_response(400, "nota", {}, "Erro ao deletar")
 
 
+# Calcular
+@app.route("/calculanf/<id>", methods=["GET"])
+def calcula_nota(id):
+    try:
+        nota_objeto = None
+        for nota in nota_list:
+            if str(id) == str(nota.id):
+                nota_objeto = nota
+
+        total_nota = nota_objeto.calcular_total_nota(True)
+
+        return gera_response(200, "calculanf", f'Total: {total_nota}', "Calculado com sucesso")
+    except Exception as e:
+        print('Erro', e)
+        return gera_response(400, "calculanf", {}, "Erro ao calcular")
+
+
+# Imprime
+@app.route("/imprimenf/<id>", methods=["GET"])
+def imprime_nota(id):
+    try:
+        nota_objeto = None
+        for nota in nota_list:
+            if str(id) == str(nota.id):
+                nota_objeto = nota
+
+        nota_impressa = nota_objeto.imprimir_nota_fiscal()
+
+        return gera_response(200, "imprimenf", nota_impressa, "Impressa com sucesso")
+    except Exception as e:
+        print('Erro', e)
+        return gera_response(400, "imprimenf", {}, "Erro ao imprimir")
+
+
 def gera_response(status, nome_do_conteudo, conteudo, mensagem=False):
     body = {}
     body[nome_do_conteudo] = conteudo
