@@ -30,7 +30,9 @@ nota_list = [
 
 nota_list[0].adicionar_item(item_list[0].to_json())
 nota_list[0].adicionar_item(item_list[1].to_json())
+nota_list[0].calcular_total_nota()
 nota_list[1].adicionar_item(item_list[2].to_json())
+nota_list[1].calcular_total_nota()
 
 
 # Selecionar Tudo
@@ -46,7 +48,7 @@ def seleciona_clientes():
 @app.route("/cliente/<id>", methods=["GET"])
 def seleciona_cliente(id):
     # usuario_objeto = Usuario.query.filter_by(id=id).first()
-    cliente_objeto = None
+    # cliente_objeto = None
     for cliente in cliente_list:
         if str(cliente.id) == str(id):
             cliente_objeto = cliente

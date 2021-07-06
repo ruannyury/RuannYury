@@ -130,32 +130,28 @@ class NotaFiscal:
         """
         Formatação final da nota fiscal, a string completa de saída. Método principal do programa.
         """
-        linhas = '-' * 111
+        json_nota = {
+            'NOTA FISCAL': self.data_nota(),
+            'Cliente': self.cliente['codigo'],
+            'Nome': self.cliente['nome'],
+            'CPF/CNPJ': self.cliente['cnpjcpf'],
+            'ITENS': '',
+        }
+        lista_itens_nota = [json_nota]
 
-        formatacao_nota = '{}\n' \
-                          'NOTA FISCAL{:>100}\n' \
-                          'Cliente:{:>6}{:>4}Nome: {}\n' \
-                          'CPF/CNPJ: {}\n' \
-                          '{}\n' \
-                          'ITENS\n' \
-                          '{}\n' \
-                          'Seq{:>3}Descricao{:>52}QTD{:>7}Valor Unit{:19}Preço\n' \
-                          '{}  {}    {}     {}     {}'.format(linhas,
-                                                              self.data_nota(),
-                                                              self.cliente['codigo'], ' ', self.cliente['nome'],
-                                                              self.cliente['cnpjcpf'],
-                                                              linhas,
-                                                              linhas,
-                                                              ' ', ' ', ' ', ' ',
-                                                              '-' * 4, '-' * 56, '-' * 5, '-' * 12, '-' * 18)
-
-        if len(self.itens) > 0:  # Adicionando e formatando os itens, elementos finais da nota
+        if len(self.itens) > 0:
             for item_nota in self.itens:
-                formatacao_nota += '\n\n{}{:>3}{}'.format(self.get_sequencial(item_nota), ' ', item_nota['descricao'])
-                formatacao_nota += ' ' * (60 - len(item_nota['descricao']))  # Controlando de acordo com a descrição
-                formatacao_nota += '{:.2f}             {:.2f}                  {:.2f}'.format(
-                    item_nota['quantidade'], item_nota['valorUnitario'],
-                    item_nota['valorItem'])
+                string_item = {
+                    'SEQ': self.get_sequencial(item_nota),
+                    'Descricao': item_nota['descricao'],
+                    'Quantidade': item_nota['quantidade'],
+                    'ValorUnitario': item_nota['valorUnitario'],
+                    'ValorItem': item_nota['valorItem']
+                }
+                lista_itens_nota.append(string_item)
 
-        formatacao_nota += '\n{}\nValor Total: {:.2f}'.format(linhas, self.valorNota)
-        return formatacao_nota
+        string_final = {
+            'Valor total': self.valorNota
+        }
+        lista_itens_nota.append(string_final)
+        return lista_itens_nota
