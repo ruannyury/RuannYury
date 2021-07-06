@@ -113,7 +113,7 @@ class NotaFiscal:
         for item in self.itens:
             valor = valor + item["valorItem"]
         self.valorNota = valor
-        if controle == True:
+        if controle is True:
             return valor
 
     def get_sequencial(self, item):

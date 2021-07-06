@@ -212,7 +212,7 @@ def seleciona_itens():
     # usuarios_objetos = Usuario.query.all()
     itens_json = [item.to_json() for item in item_list]
 
-    return gera_response(200, "produtos", itens_json)
+    return gera_response(200, "itens", itens_json)
 
 
 # Selecionar Individual
@@ -401,11 +401,12 @@ def calcula_nota(id):
 @app.route("/imprimenf/<id>", methods=["GET"])
 def imprime_nota(id):
     try:
+
         nota_objeto = None
         for nota in nota_list:
             if str(id) == str(nota.id):
                 nota_objeto = nota
-
+        nota_objeto.calcular_total_nota()
         nota_impressa = nota_objeto.imprimir_nota_fiscal()
 
         return gera_response(200, "imprimenf", nota_impressa, "Impressa com sucesso")

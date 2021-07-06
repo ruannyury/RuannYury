@@ -1,18 +1,11 @@
-from app import db
 import datetime
 from sqlalchemy.sql import func
 from sqlalchemy import Table, Column, Integer, Float, ForeignKey
 from sqlalchemy.orm import relationship, backref, session, query
 from sqlalchemy.ext.declarative import declarative_base
-
-
-class Usuario(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(50))
-    email = db.Column(db.String(100))
-
-    def to_json(self):
-        return {"id": self.id, "nome": self.nome, "email": self.email}
+from flask import Flask, Response, request
+from flask_sqlalchemy import SQLAlchemy
+import json
 
 
 class Cliente(db.Model):
@@ -23,6 +16,8 @@ class Cliente(db.Model):
     codigo = db.Column(db.Integer)
     cnpjcpf = db.Column(db.String(150))
     tipo = db.Column(db.String(150))
+
+    notas = db.relationship("NotaFiscal")
 
     def __init__(self, id, nome, codigo, cnpjcpf, tipo):
         self.id = id
@@ -46,6 +41,9 @@ class ItemNotaFiscal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     sequencial = db.Column(db.Integer)
     quantidade = db.Column(db.Integer)
+
+    produtos = db.relationship("Produto")
+    nota_id = db.Column(db.Integer, db.ForeignKey('notas.id'))
 
     def __init__(self, id, sequencial, quantidade, produto):
         self.id = id
@@ -90,6 +88,8 @@ class Produto:
     descricao = db.Column(db.String(150))
     valorUnitario = db.Column(db.Float)
 
+    item_id = db.Column(db.Integer, db.ForeignKey('itens.id'))
+
     def __init__(self, id, codigo, descricao, valorUnitario):
         self.id = id
         self.codigo = codigo
@@ -110,6 +110,9 @@ class NotaFiscal:
 
     id = db.Column(db.Integer, primary_key=True)
     codigo = db.Column(db.String(150))
+
+    cliente_id = db.Column(db.Integer, db.ForeignKey('clientes.id'))
+    itens = db.relationship("ItemNotaFiscal")
 
     def __init__(self, id, codigo, cliente, lista_itens=None):
         self.id = id
